@@ -1,0 +1,57 @@
+{
+    "name": "tecnomanu/unilogin-laravel-lumen",
+    "description": "Un paquete de autenticación universal mediante enlace mágico.",
+    "type": "library",
+    "keywords": [
+        "auth",
+        "authentication",
+        "json web token",
+        "jwt",
+        "laravel",
+        "lumen",
+        "login provider",
+        "login passport"
+    ],
+    "homepage": "https://github.com/tecnomanu/unilogin-laravel-lumen",
+    "support": {
+        "issues": "https://github.com/tecnomanu/unilogin-laravel-lumen/issues",
+        "source": "https://github.com/tecnomanu/unilogin-laravel-lumen"
+    },
+    "authors": [
+        {
+            "name": "Manuel Bruna - Tecnomanu",
+            "email": "manu@incubit.com.ar",
+            "homepage": "https://tecnomanu.com.ar/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "illuminate/support": "^7.0|^8.0|^9.0",
+        "illuminate/database": "^7.0|^8.0|^9.0",
+        "illuminate/events": "^7.0|^8.0|^9.0",
+        "firebase/php-jwt": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "mockery/mockery": "^1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tecnomanu\\UniLogin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tecnomanu\\UniLogin\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tecnomanu\\UniLogin\\Providers\\LaravelServiceProvider"
+            ]
+        }
+    },
+    "license": "MIT"
+}
