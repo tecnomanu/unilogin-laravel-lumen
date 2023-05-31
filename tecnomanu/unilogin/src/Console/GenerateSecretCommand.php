@@ -21,7 +21,7 @@ class GenerateSecretCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'unilogin:create.secret
+    protected $signature = 'unilogin:create-secret
         {--s|show : Display the key instead of modifying files.}
         {--always-no : Skip generating key if it already exists.}
         {--f|force : Skip confirmation when overwriting an existing key.}';

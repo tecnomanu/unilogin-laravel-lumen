@@ -45,7 +45,14 @@ class LaravelServiceProvider extends ServiceProvider
                 __DIR__.'/../../Notifications' => function_exists('app_path')
                                                 ? app_path('Notifications')
                                                 : base_path('app/Notifications'),
-            ]);
+            ], 'unilogin-notifications');
+
+            // Publicar la configuración de UniLogin para que los usuarios puedan personalizarla.
+            $this->publishes([
+                __DIR__.'/../views' => function_exists('config_path')
+                                                        ? resource_path('views/vendor/unilogin')
+                                                        : base_path('resources/views/vendor/unilogin'),
+            ], 'unilogin-views');
         }
     }
 }
