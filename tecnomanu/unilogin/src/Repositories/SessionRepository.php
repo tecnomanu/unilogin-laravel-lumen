@@ -50,7 +50,22 @@ class SessionRepository implements SessionRepositoryContract
     public function updateStatus(string $token, string $status): void
     {
         DB::table($this->table)
-                ->where('token', hash('sha256', $token))
-                ->update(['status' => $status]);
+            ->where('token', hash('sha256', $token))
+            ->update(['status' => $status]);
+    }
+
+    /**
+     * Remove a Session.
+     *
+     * @param string $token
+     * @param string $status
+     * @return void
+     */
+    public function remove(string $sessionId, string $token): void
+    {
+        DB::table($this->table)
+            ->where('token', hash('sha256', $token))
+            ->where('session_id', $sessionId)
+            ->delete();
     }
 }

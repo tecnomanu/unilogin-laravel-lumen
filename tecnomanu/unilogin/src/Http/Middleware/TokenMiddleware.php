@@ -4,9 +4,12 @@ namespace Tecnomanu\UniLogin\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Tecnomanu\UniLogin\Exceptions\UniLoginException;
 
 use Tecnomanu\UniLogin\Contracts\Services\TokenServiceContract;
+
+use Tecnomanu\UniLogin\Exceptions\UniLoginExpiredException;
+use Tecnomanu\UniLogin\Exceptions\UniLoginUnauthorizedException;
+use Firebase\JWT\ExpiredException;
 
 abstract class TokenMiddleware
 {
@@ -29,6 +32,8 @@ abstract class TokenMiddleware
 
         try {
             $credentials = $this->tokenService->decode($token);
+        } catch(ExpiredException $e) {
+            throw new UniLoginExpiredException();
         } catch(\Exception $e) {
             throw $e;
         }
@@ -37,7 +42,7 @@ abstract class TokenMiddleware
         
         // Validate token login type if is required
         if($this->expectedType && (!$credentials || $credentials['type'] !== $this->expectedType)) {
-            throw new \Exception('Invalid token type.');
+            throw new UniLoginUnauthorizedException('Invalid token type.');
         }
 
         // Put the user's email in the request so it can be accessed in the controller.

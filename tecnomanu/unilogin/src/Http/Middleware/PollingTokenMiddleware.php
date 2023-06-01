@@ -17,7 +17,12 @@ class PollingTokenMiddleware extends TokenMiddleware
             parent::handle($request, $next);
 
             $credentials = $request->get('credentials');
-            $request->merge(['session_id' => $credentials['sessionId'], 'token' => $credentials['token']]);
+            
+            $request->merge([
+                'session_id' => $credentials['sessionId'], 
+                'token' => $credentials['token'],
+                'email' => $credentials['email']
+            ]);
             
             return $next($request);
         } catch (\Exception $e) {

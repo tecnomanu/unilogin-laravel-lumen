@@ -5,8 +5,9 @@ namespace Tecnomanu\UniLogin\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Tecnomanu\UniLogin\Enums\UniLoginTypes;
+use Tecnomanu\UniLogin\Exceptions\UniLoginExpiredException;
 
-class SessionTokenMiddleware extends TokenMiddleware
+class SuccessTokenMiddleware extends TokenMiddleware
 {
     protected $expectedType = UniLoginTypes::SUCCESS;
 
@@ -17,11 +18,13 @@ class SessionTokenMiddleware extends TokenMiddleware
             parent::handle($request, $next);
 
             $credentials = $request->get('credentials');
+
             $request->merge(['email' => $credentials['email']]);
             
             return $next($request);
         } catch (\Exception $e) {
-            return response()->json(["status" => "error" , "data" => "Access Unauthorized."], $e->getCode() > 0 ? $e->getCode() : 400);
+            $message = $e instanceof UniLoginExpiredException ? $e->getMessage() :"Access Unauthorized.";
+            return response()->json(["status" => "error" , "data" => $message], $e->getCode() > 0 ? $e->getCode() : 400);
         }
     }
 }

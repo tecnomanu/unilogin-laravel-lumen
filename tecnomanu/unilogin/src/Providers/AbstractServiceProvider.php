@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 // Middleware's
 use Tecnomanu\UniLogin\Http\Middleware\AcceptSessionMiddleware;
 use Tecnomanu\UniLogin\Http\Middleware\CallbackTokenMiddleware;
-use Tecnomanu\UniLogin\Http\Middleware\SessionTokenMiddleware;
+use Tecnomanu\UniLogin\Http\Middleware\SuccessTokenMiddleware;
 use Tecnomanu\UniLogin\Http\Middleware\PollingTokenMiddleware;
 
 // Contracts
@@ -42,7 +42,7 @@ abstract class AbstractServiceProvider extends ServiceProvider
      * @var array
      */
     protected $middlewareAliases = [
-        'unilogin.session' => SessionTokenMiddleware::class,
+        'unilogin.success' => SuccessTokenMiddleware::class,
         'unilogin.callback' => CallbackTokenMiddleware::class,
         'unilogin.accept' => AcceptSessionMiddleware::class,
         'unilogin.polling' => PollingTokenMiddleware::class,        

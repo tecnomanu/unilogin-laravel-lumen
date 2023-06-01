@@ -43,16 +43,9 @@ class TokenService implements TokenServiceContract
         return JWT::decode($token, new Key($this->jwtKey, $this->algo));
     }
 
-    public function generateToken($sessionId, $token, $type): string{
+    public function generateToken($payload, $type): string{
         // Generate JWT
         $lifetime = config('unilogin.token_lifetime');
-        
-        $payload = [
-            'sessionId' => $sessionId, 
-            'token' => $token,
-        ];
-
-
         return $this->encode($payload, $type, $lifetime);
     }
 }

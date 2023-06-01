@@ -37,6 +37,6 @@ interface TokenServiceContract
      * @return object
      * @throws \Exception If the token is invalid.
      */
-    public function generateToken(string $sessionId, string $token, string $type): string;
+    public function generateToken(array $payload, string $type): string;
 }
 

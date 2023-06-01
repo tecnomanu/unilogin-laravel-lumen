@@ -47,12 +47,10 @@ class UniLoginService implements UniLoginServiceContract
                 throw new \Exception('An error ocurred.');
                 
             $session = $this->sessionService->create($userEmail, $magicLink['token']);
-            $sessionToken = $this->tokenService->generateToken(
-                $session['session_id'], 
-                $magicLink['token'], 
-                UniLoginTypes::POLLING,
-                config('unilogin.token_lifetime')
-            );
+
+            // Create Session Token
+            $payload = ["sessionId" => $session['session_id'], "token" => $magicLink['token'], "email" => $userEmail ];
+            $sessionToken = $this->tokenService->generateToken($payload, UniLoginTypes::POLLING);
 
             // Envía el enlace mágico por correo electrónico
             $user->notify( new MagicLinkNotification($magicLink['link']) );
@@ -72,17 +70,14 @@ class UniLoginService implements UniLoginServiceContract
     public function handlePolling(string $sessionId, string $token, string $email): ?JsonResponse
     {
         $session = $this->sessionService->find($sessionId, $token);
-
+        
         if(!$session)
             throw new UniLoginUnauthorizedException();
         if($session['status'] !== UniLoginSessionStatus::ACCEPTED)
             throw new UniLoginForbiddenException();
 
-        $loggedToken = $this->tokenService->generateToken(
-            $email,  
-            UniLoginTypes::SUCCESS,
-            60
-        );
+        $payload = ["email" => $email];
+        $loggedToken = $this->tokenService->encode($payload, UniLoginTypes::SUCCESS, 60);
 
         return response()->json(['token' => $loggedToken]);
     }
@@ -102,12 +97,10 @@ class UniLoginService implements UniLoginServiceContract
         if(!$redirectUrl)
             $redirectUrl = config('unilogin.api_base_path'). "unilogin/success";
 
-        $loggedToken = $this->tokenService->generateToken(
-            $email, 
-            $token, 
-            UniLoginTypes::ACCEPTED,
-            60
-        );
+
+        $payload = ["token" => $token, "email" => $email];
+        $loggedToken = $this->tokenService->encode($payload, UniLoginTypes::ACCEPTED, 60);
+
         return redirect($redirectUrl.'?token=' . $loggedToken);
     }
 

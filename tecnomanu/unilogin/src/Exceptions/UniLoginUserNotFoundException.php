@@ -4,7 +4,7 @@ namespace Tecnomanu\UniLogin\Exceptions;
 
 use Exception;
 
-class UserNotFoundException extends Exception
+class UniLoginUserNotFoundException extends Exception
 {
     /**
      * The message to use for the response.
