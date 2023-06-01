@@ -39,11 +39,11 @@ jobs:
         draft: false
         prerelease: false
 
-- name: Get changes
-  id: changes
-  run: |
-    changes=$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD)
-    changes="${changes//'%'/'%25'}"
-    changes="${changes//$'\n'/'%0A'}"
-    changes="${changes//$'\r'/'%0D'}"
-    echo "::set-output name=changes::$changes"
+    - name: Get changes
+      id: changes
+      run: |
+        changes=$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD)
+        changes="${changes//'%'/'%25'}"
+        changes="${changes//$'\n'/'%0A'}"
+        changes="${changes//$'\r'/'%0D'}"
+        echo "::set-output name=changes::$changes"
