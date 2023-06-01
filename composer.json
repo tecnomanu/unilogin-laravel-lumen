@@ -1,6 +1,6 @@
 {
     "name": "tecnomanu/unilogin-laravel-lumen",
-    "description": "Un paquete de autenticación universal mediante enlace mágico.",
+    "description": "A universal authentication package through magic link",
     "type": "library",
     "keywords": [
         "auth",
