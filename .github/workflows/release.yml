@@ -27,6 +27,10 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     # Run tests here if you have any
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
 
     - name: Create Release
       id: create_release
@@ -34,8 +38,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.extract_branch.outputs.branch }}
+        release_name: Release ${{ steps.extract_branch.outputs.branch }}
         body: |
           Changes in this Release
           ${{ steps.changes.outputs.changes }}
