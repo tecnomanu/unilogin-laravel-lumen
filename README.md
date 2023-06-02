@@ -2,6 +2,9 @@
 
 UniLogin is a Laravel/Lumen package that allows users to log in to a web application through a magic link. This means that the user does not need to remember a password to log in, but simply clicks on a link that is sent to their email.
 
+#### Enter on Gitbook Documentation:
+https://unilogin.gitbook.io/docs/
+
 ## Index
 
 1. [Introduction](#introduction)
