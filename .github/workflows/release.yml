@@ -35,15 +35,16 @@ jobs:
         changes="${changes//$'\r'/'%0D'}"
         echo "::set-output name=changes::$changes"
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
-
     - name: Extract tag name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/tags/})"
-      id: extract_tag
+      id: tag
+      uses: actions/github-script@0.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          return context.payload.ref.replace(/\/refs\/tags\//, '');
+
+    - name: Echo
+      run: echo ${{ steps.tag.outputs.result }}
 
     - name: Create Release
       id: create_release
@@ -51,8 +52,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.extract_tag.outputs.tag }}
-        release_name: Release ${{ steps.extract_tag.outputs.tag }}
+        tag_name: ${{ steps.tag.outputs.result }}
+        release_name: Release ${{ steps.tag.outputs.result }}
         body: |
           Changes in this Release
           ${{ steps.changes.outputs.changes }}
