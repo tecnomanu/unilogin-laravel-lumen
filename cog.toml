@@ -14,6 +14,7 @@ template = "remote"
 remote = "github.com"
 repository = "cocogitto_bot_playground"
 owner = "cocogitto"
+
 authors = [
   { username = "tecnomanu", signature = "Manuel Bruña"}
 ]
