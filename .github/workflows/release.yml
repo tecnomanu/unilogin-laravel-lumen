@@ -6,7 +6,7 @@ on:
       - main  # o reemplace 'main' con 'master' si ese es el nombre de su rama principal
 
 jobs:
-  build:
+  new-release:
     runs-on: ubuntu-latest
     
     permissions:
@@ -26,36 +26,24 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: Get changes
-      id: changes
-      run: |
-        changes=$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD)
-        changes="${changes//'%'/'%25'}"
-        changes="${changes//$'\n'/'%0A'}"
-        changes="${changes//$'\r'/'%0D'}"
-        echo "::set-output name=changes::$changes"
+    - uses: actions/checkout@v3 # Checkout our working repository 
+    - name: Conventional Changelog Action
+      id: changelog 
+      uses: TriPSs/conventional-changelog-action@v3 
+      with: 
+        github-token: ${{ secrets.GITHUB_TOKEN }} 
+        output-file: "false" 
 
-    - name: Extract tag name
-      id: tag
-      uses: actions/github-script@0.2.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          return context.payload.ref.replace(/\/refs\/tags\//, '');
-
-    - name: Echo
-      run: echo ${{ steps.tag.outputs.result }}
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
+    - name: Create Release # This action will create the actual release 
+      uses: actions/create-release@v1 
+      if: ${{ steps.changelog.outputs.skipped == 'false' }} 
+      env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.tag.outputs.result }}
-        release_name: Release ${{ steps.tag.outputs.result }}
+      with: 
+        tag_name: ${{ steps.changelog.outputs.tag }}
+        release_name: ${{ steps.changelog.outputs.tag }}
         body: |
           Changes in this Release
-          ${{ steps.changes.outputs.changes }}
+          ${{ steps.changelog.outputs.clean_changelog }}
         draft: false
         prerelease: false
