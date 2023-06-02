@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - main  # o reemplace 'main' con 'master' si ese es el nombre de su rama principal
+      - main
 
 jobs:
   new-release:
@@ -26,12 +26,11 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-suggest
 
-    - uses: actions/checkout@v3 # Checkout our working repository 
     - name: Conventional Changelog Action
       id: changelog 
       uses: TriPSs/conventional-changelog-action@v3 
       with: 
-        github-token: ${{ secrets.GITHUB_TOKEN }} 
+        github-token: ${{ secrets.github_token }} 
         output-file: "false" 
 
     - name: Create Release # This action will create the actual release 
